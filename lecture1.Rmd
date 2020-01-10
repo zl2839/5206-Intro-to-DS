@@ -1,0 +1,240 @@
+---
+title: "5206 Lecture-01"
+author: "Ziying Liu"
+date: "12/4/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+```
+**Warm up**
+\newline
+Data structures
+\newline
+Homoheneous : Atomic vector; Matrix ; Array
+Heterogeneous : List; Data Frame 
+```{r}
+x = c(5,29,13,87)
+str(x) #Best way to understand what data structures is (str() (short for structure))
+
+```
+
+**Vector**
+Two flavours: atomic vectors; lists
+\newline
+Three common properties:
+\newline
+1. Type, typeof(), what it is.
+\newline
+2. Length, length(), how many elements it contains.
+\newline
+3.  Attributes, attributes(), additional arbitrary metadata.
+
+
+```{r}
+NA^0
+str(c("a", 1))
+```
+**Attributes**
+\newline
+Attributes can be retrieved/modified: individually with attr(), or “En masse” with attributes()/structure().
+
+```{r}
+a <- 1:3
+attr(a, "x") <- "abcdef"
+attr(a, "y") <- 4:6
+
+attr(a,'x')
+attributes(a)
+str(attributes(a))
+
+#or equivalently
+b <- structure(
+1:3,
+x = "abcdef",
+y = 4:6
+)
+b
+```
+
+```{r}
+x <- 1:3
+names(x) <- c("a", "b", "c")  #By assigning a character vector to names()
+
+y <- setNames(1:3, c("a", "b", "c"))
+#Remove names with unname(x) or names(x) <- NULL.
+```
+
+**Matrix**
+```{r}
+a <- matrix(1:6, nrow = 2, ncol = 3) # two dimensions matrix
+a
+rownames(a) = c('x','y')
+b <- array(1:12, c(2, 3, 2)) #multi-dimensional array
+b
+
+```
+Functions for working with vectors, matrices and arrays:
+Vector        |Matrix        |Array
+------------- | -------------|------------
+names()       | rownames(), colnames()| dimnames()
+length()      |nrow(), ncol()| dim()
+c()           |rbind(),cbind()|abind::abind()
+-             |t()           |aperm()
+is.null(dim(x))| is.matrix() |is.array()
+
+
+
+**Factor**
+```{r}
+x <- factor(c("a", "b", "b", "a"))
+x
+attributes(x)
+table(x)
+
+grade <- ordered(c("b", "b", "a", "c"), levels = c("c", "b", "a"))
+grade #Ordered factors
+```
+**Dates**
+```{r}
+today <- Sys.Date()
+attributes(today)
+unclass(today) #the number of days since 1970-01-01
+
+```
+
+**Dates-times**
+Two ways of storing this information: POSIXct, and POSIXlt.
+\newline
+Odd names:
+\newline
+1. “POSIX” is short for “Portable Operating System Interface”,
+\newline
+2. “ct” stands for calendar time (the time_t type in C),
+\newline
+3. and “lt” for local time (the struct tm type in C).
+\newline
+Focus on POSIXct (the simplest):
+\newline
+1. Built on top of a double vector.
+\newline
+2. Value = number of seconds since 1970-01-01.
+```{r}
+now_ct <- as.POSIXct("2018-08-01 22:00", tz = "UTC")
+now_ct
+attributes(now_ct)
+structure(now_ct, tzone = "Asia/Tokyo")
+one_week_1 <- as.difftime(1, units = "weeks")
+one_week_1
+attributes(one_week_1)
+
+one_week_2 <- as.difftime(7, units = "days")
+one_week_2
+
+attributes(one_week_2)
+```
+**List**
+```{r}
+l1 <- list(
+1:3,
+"a",
+c(TRUE, FALSE, TRUE),
+c(2.3, 5.9)
+)
+l1
+str(l1)
+l4 <- list(list(1, 2), c(3, 4))
+l5 <- c(list(1, 2), c(3, 4)) # c() will combine several lists into one:
+str(l4)
+str(l5)
+```
+
+**Data frame and tibbles**
+```{r}
+df1 <- data.frame(x = 2:4, y = letters[1:3])
+attributes(df1)
+df1
+
+library(tibble) #tibble, a modern reimagining of the data frame.
+df2 <- tibble(x = 4:6, y = letters[1:3])
+typeof(df2)
+attributes(df2)
+
+```
+List columns
+```{r}
+df <- data.frame(x = 1:3)
+df$y <- list(1:2, 1:3, 1:4)
+data.frame(
+x = 1:3,
+y = I(list(1:2, 1:3, 1:4))
+)
+tibble(
+x = 1:3,
+y = list(1:2, 1:3, 1:4)
+)
+```
+
+
+```{r}
+vals <- outer(1:5, 1:5, FUN = "paste", sep = ",")
+vals
+vals[c(4,8)]
+
+select <- matrix(ncol = 2, byrow = TRUE, c(
+1, 1,
+3, 1,
+2, 4
+))
+vals[select]
+
+
+```
+
+
+
+```{r}
+df = tibble(x = 1:3, y = 3:1, z = letters[1:3])
+df
+str(df["x"])
+str(df[, "x"])
+
+
+```
+```{r}
+x <- list(1:3, "a", 4:6)
+x
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
